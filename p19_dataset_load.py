@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 import os
+import nnfs
+
+nnfs.init()
 
 # Loads a MNIST dataset
 
@@ -35,9 +38,28 @@ def create_data_mnist(path):
     # And return all the data
     return X, y, X_test, y_test
 
-# Create dataset
-X, y, X_test, y_test = create_data_mnist('fashion_mnist_images')
+def generate_dataset():
+    # Create dataset
+    X, y, X_test, y_test = create_data_mnist('fashion_mnist_images')
 
-# Scale features
-X = (X.astype(np.float32) - 127.5) / 127.5
-X_test = (X_test.astype(np.float32) - 127.5) / 127.5
+    # Scale features
+    X = (X.astype(np.float32) - 127.5) / 127.5
+    X_test = (X_test.astype(np.float32) - 127.5) / 127.5
+
+    print(X.min(), X.max())
+
+    print(X.shape)
+
+    # Reshape the vectors
+    X = X.reshape(X.shape[0], -1)
+    X_test = X_test.reshape(X_test.shape[0], -1)
+
+    # shuffle the training dataset
+    keys = np.array(range(X.shape[0]))
+    np.random.shuffle(keys)
+
+    X = X[keys]
+    y = y[keys]
+
+    return X, y, X_test, y_test
+
