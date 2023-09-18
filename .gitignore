@@ -1,2 +1,5 @@
 fashion_mnist_images*
 __pycache__
+__MACOSX
+*.model
+*.parms
